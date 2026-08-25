@@ -90,7 +90,12 @@ export default function Header() {
               <li><Link to="/contact" className={`nav-link ${isActive('/contact')}`}>Contact</Link></li>
               
               {isAuthenticated ? (
-                <li><Link to="/dashboard" className={`nav-link ${isActive('/dashboard')}`}>Client Portal</Link></li>
+                <>
+                  <li><Link to="/dashboard" className={`nav-link ${isActive('/dashboard')}`}>Client Portal</Link></li>
+                  {user?.role === 'admin' && (
+                    <li><Link to="/admin" className={`nav-link ${isActive('/admin')}`} style={{ color: '#D4AF37', fontWeight: 600 }}>Admin Console</Link></li>
+                  )}
+                </>
               ) : (
                 <li><Link to="/login" className={`nav-link nav-link-signin ${isActive('/login')}`}>Sign In</Link></li>
               )}

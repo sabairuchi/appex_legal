@@ -8,5 +8,15 @@
     "isRead": true,
     "createdAt": "2026-08-25T09:34:58.409Z",
     "updatedAt": "2026-08-25T09:34:58.459Z"
+  },
+  {
+    "_id": "7e09927b62f7a0b5361678d6",
+    "client": "95a11aa2a5ca48e9152c4b93",
+    "title": "Appointment Requested",
+    "message": "Your consultation request \"M&A Shareholder Agreement Review\" for 2026-09-20 at 10:00 AM has been submitted.",
+    "type": "appointment",
+    "isRead": false,
+    "createdAt": "2026-08-25T10:23:47.607Z",
+    "updatedAt": "2026-08-25T10:23:47.607Z"
   }
 ]

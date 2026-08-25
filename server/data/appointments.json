@@ -11,5 +11,18 @@
     "notes": "Discussion regarding shareholder agreement review.",
     "createdAt": "2026-08-25T09:34:58.396Z",
     "updatedAt": "2026-08-25T09:34:58.397Z"
+  },
+  {
+    "_id": "4713d7e46b11370c2d4053c4",
+    "client": "95a11aa2a5ca48e9152c4b93",
+    "lawyer": "9bd0fa6ecfe9dbebb9fd90fc",
+    "title": "M&A Shareholder Agreement Review",
+    "appointmentType": "Corporate & M&A",
+    "appointmentDate": "2026-09-22",
+    "appointmentTime": "02:00 PM",
+    "status": "confirmed",
+    "notes": "Need expert legal counsel on equity vesting schedules.",
+    "createdAt": "2026-08-25T10:23:47.600Z",
+    "updatedAt": "2026-08-25T10:23:47.651Z"
   }
 ]

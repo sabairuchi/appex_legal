@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import PublicLayout from '../layouts/PublicLayout';
 import ClientPortalLayout from '../layouts/ClientPortalLayout';
+import AdminLayout from '../layouts/AdminLayout';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 import Home from '../pages/public/Home';
@@ -24,6 +25,12 @@ import Profile from '../pages/client/Profile';
 import Appointments from '../pages/client/Appointments';
 import Notifications from '../pages/client/Notifications';
 import Documents from '../pages/client/Documents';
+
+import AdminDashboard from '../pages/admin/AdminDashboard';
+import UserManagement from '../pages/admin/UserManagement';
+import LawyerManagement from '../pages/admin/LawyerManagement';
+import AppointmentManagement from '../pages/admin/AppointmentManagement';
+import AnalyticsDashboard from '../pages/admin/AnalyticsDashboard';
 
 export default function AppRoutes() {
   return (
@@ -100,6 +107,23 @@ export default function AppRoutes() {
         {/* Fallback 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Route>
+
+      {/* Protected Admin Console Routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="users" element={<UserManagement />} />
+        <Route path="lawyers" element={<LawyerManagement />} />
+        <Route path="appointments" element={<AppointmentManagement />} />
+        <Route path="analytics" element={<AnalyticsDashboard />} />
+      </Route>
     </Routes>
   );
 }
+

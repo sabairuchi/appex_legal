@@ -48,3 +48,7 @@ export const authorize = (...roles) => {
     next();
   };
 };
+
+export const authenticateUser = protect;
+export const requireRole = (...roles) => authorize(...roles);
+

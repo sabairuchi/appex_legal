@@ -5,7 +5,6 @@ server/node_modules/
 # Build outputs
 dist/
 build/
-.vite/
 
 # Environment files
 .env
@@ -14,8 +13,7 @@ build/
 server/.env
 server/.env.*
 
-# Uploads, Logs & Cache
-uploads/
+# Logs & data
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -27,4 +25,3 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
-

@@ -49,6 +49,19 @@ const userSchema = new mongoose.Schema(
       ref: 'User',
       default: null,
     },
+    specialization: {
+      type: String,
+      default: '',
+    },
+    experienceYears: {
+      type: Number,
+      default: 0,
+    },
+    availabilityStatus: {
+      type: String,
+      enum: ['available', 'busy', 'on_leave'],
+      default: 'available',
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -117,6 +130,9 @@ class EmbeddedUserDoc {
     this.phone = data.phone || '';
     this.bio = data.bio || '';
     this.assignedLawyerId = data.assignedLawyerId || null;
+    this.specialization = data.specialization || '';
+    this.experienceYears = data.experienceYears !== undefined ? Number(data.experienceYears) : 0;
+    this.availabilityStatus = data.availabilityStatus || 'available';
     this.isActive = data.isActive !== undefined ? data.isActive : true;
     this.resetPasswordToken = data.resetPasswordToken || undefined;
     this.resetPasswordExpires = data.resetPasswordExpires
@@ -152,6 +168,9 @@ class EmbeddedUserDoc {
       phone: this.phone,
       bio: this.bio,
       assignedLawyerId: this.assignedLawyerId,
+      specialization: this.specialization,
+      experienceYears: this.experienceYears,
+      availabilityStatus: this.availabilityStatus,
       isActive: this.isActive,
       resetPasswordToken: this.resetPasswordToken,
       resetPasswordExpires: formattedExpires,
@@ -195,6 +214,59 @@ export default class User {
     return await bcrypt.hash(password, salt);
   }
 
+  static find(query = {}) {
+    if (isMongooseConnected) {
+      let q = MongooseUser.find();
+      if (query.role) q = q.where('role').equals(query.role);
+      if (query.isActive !== undefined) q = q.where('isActive').equals(query.isActive);
+      return q.select('-passwordHash');
+    }
+
+    const p = (async () => {
+      const users = loadUsersFromFile();
+      let filtered = users;
+
+      if (query.role) {
+        filtered = filtered.filter((u) => u.role === query.role);
+      }
+      if (query.isActive !== undefined) {
+        filtered = filtered.filter((u) => u.isActive === query.isActive);
+      }
+      if (query.search) {
+        const s = query.search.toLowerCase();
+        filtered = filtered.filter((u) => u.fullName.toLowerCase().includes(s) || u.email.toLowerCase().includes(s));
+      }
+
+      return filtered.map((u) => {
+        const doc = new EmbeddedUserDoc(u);
+        delete doc.passwordHash;
+        delete doc.resetPasswordToken;
+        delete doc.resetPasswordExpires;
+        return doc;
+      });
+    })();
+
+    return p;
+  }
+
+  static countDocuments(query = {}) {
+    if (isMongooseConnected) {
+      return MongooseUser.countDocuments(query);
+    }
+
+    return (async () => {
+      const users = loadUsersFromFile();
+      let filtered = users;
+      if (query.role) {
+        filtered = filtered.filter((u) => u.role === query.role);
+      }
+      if (query.isActive !== undefined) {
+        filtered = filtered.filter((u) => u.isActive === query.isActive);
+      }
+      return filtered.length;
+    })();
+  }
+
   static findOne(query) {
     if (isMongooseConnected) {
       return MongooseUser.findOne(query);
@@ -205,7 +277,7 @@ export default class User {
       let found = null;
 
       if (query.email) {
-        found = users.find((u) => u.email === query.email);
+        found = users.find((u) => u.email === query.email.toLowerCase());
       } else if (query.resetPasswordToken) {
         found = users.find((u) => {
           if (u.resetPasswordToken !== query.resetPasswordToken) return false;
@@ -223,15 +295,18 @@ export default class User {
   }
 
   static findById(id) {
+    if (!id) return new QueryChain(Promise.resolve(null));
     if (isMongooseConnected) {
       return MongooseUser.findById(id).select('-passwordHash');
     }
 
     const p = (async () => {
       const users = loadUsersFromFile();
-      const found = users.find((u) => u._id === id);
+      const found = users.find((u) => u._id === id.toString());
       if (!found) return null;
-      return new EmbeddedUserDoc(found);
+      const doc = new EmbeddedUserDoc(found);
+      delete doc.passwordHash;
+      return doc;
     })();
 
     return new QueryChain(p);
@@ -256,16 +331,37 @@ export default class User {
     const idx = users.findIndex((u) => u._id === id.toString());
     if (idx === -1) return null;
 
-    // Apply allowed updates
     const user = users[idx];
     if (updateData.fullName !== undefined) user.fullName = updateData.fullName;
+    if (updateData.email !== undefined) user.email = updateData.email.toLowerCase();
     if (updateData.phone !== undefined) user.phone = updateData.phone;
     if (updateData.bio !== undefined) user.bio = updateData.bio;
     if (updateData.profileImage !== undefined) user.profileImage = updateData.profileImage;
+    if (updateData.role !== undefined) user.role = updateData.role;
+    if (updateData.isActive !== undefined) user.isActive = updateData.isActive;
+    if (updateData.assignedLawyerId !== undefined) user.assignedLawyerId = updateData.assignedLawyerId;
+    if (updateData.specialization !== undefined) user.specialization = updateData.specialization;
+    if (updateData.experienceYears !== undefined) user.experienceYears = Number(updateData.experienceYears);
+    if (updateData.availabilityStatus !== undefined) user.availabilityStatus = updateData.availabilityStatus;
     user.updatedAt = new Date().toISOString();
 
     users[idx] = user;
     saveUsersToFile(users);
-    return new EmbeddedUserDoc(user);
+    const doc = new EmbeddedUserDoc(user);
+    delete doc.passwordHash;
+    return doc;
+  }
+
+  static async findByIdAndDelete(id) {
+    if (isMongooseConnected) {
+      return MongooseUser.findByIdAndDelete(id);
+    }
+
+    const users = loadUsersFromFile();
+    const idx = users.findIndex((u) => u._id === id.toString());
+    if (idx === -1) return null;
+    const removed = users.splice(idx, 1)[0];
+    saveUsersToFile(users);
+    return new EmbeddedUserDoc(removed);
   }
 }
