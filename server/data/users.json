@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "d5cd178199c1ab830e898ced",
+    "fullName": "Marcus Aurelius",
+    "email": "marcus@apexlegal.com",
+    "passwordHash": "$2b$12$Oj3CcipeyqPGktca4lG7U.RkXTmbVAK9eGAqu0L4MW3ncEhrbWyuW",
+    "role": "client",
+    "profileImage": "",
+    "isActive": true,
+    "resetPasswordToken": "43fe6659a3654a47c7103f900f78c1a01c94c35c8f446364ff4526ca750d51fa",
+    "resetPasswordExpires": "2026-08-25T06:35:38.786Z",
+    "createdAt": "2026-08-25T05:35:38.649Z",
+    "updatedAt": "2026-08-25T05:35:38.786Z"
+  },
+  {
+    "_id": "98d017bac3bcec8cf8e3bf8b",
+    "fullName": "John",
+    "email": "john@example.com",
+    "passwordHash": "$2b$12$zBxm5i894wBZDgCY6Plwr.cUz4PZoUeauf1reej4.NG.Xso/Z6oy2",
+    "role": "client",
+    "profileImage": "",
+    "isActive": true,
+    "createdAt": "2026-08-25T05:59:08.838Z",
+    "updatedAt": "2026-08-25T05:59:08.839Z"
+  }
+]

@@ -1,0 +1,128 @@
+:root {
+  /* Colors */
+  --navy-primary:    #1B2A4A;
+  --navy-secondary:  #243860;
+  --navy-dark:       #0D1B2A;
+  --gold-accent:     #C9A84C;
+  --gray-pillar:     #6B7280;
+  --gray-light:      #9CA3AF;
+  --gray-bg:         #F4F5F7;
+  --white:           #FFFFFF;
+  --off-white:       #F8F9FA;
+  
+  /* Typography */
+  --font-display:    'Playfair Display', serif;
+  --font-heading:    'Cormorant Garamond', serif;
+  --font-body:       'Inter', sans-serif;
+  
+  /* Spacing */
+  --section-padding: 100px 0;
+  --container-max:   1280px;
+  --container-pad:   0 40px;
+  
+  /* Borders & Effects */
+  --gold-rule:       1px solid var(--gold-accent);
+  --card-shadow:     0 4px 24px rgba(27, 42, 74, 0.12);
+  --transition:      all 0.3s ease;
+}
+
+/* Reset & Basics */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font-body);
+  color: var(--navy-primary);
+  background-color: var(--white);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-family: var(--font-display);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--container-pad);
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.section {
+  padding: var(--section-padding);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  color: var(--gold-accent);
+  text-transform: uppercase;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.eyebrow::before, .eyebrow::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background-color: var(--gold-accent);
+}
+
+/* Skip to content */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--gold-accent);
+  color: var(--navy-dark);
+  padding: 8px;
+  z-index: 1000;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Page Transition Animations */
+body {
+  opacity: 1;
+}
+
+/* Responsive Globals */
+@media (max-width: 768px) {
+  :root {
+    --section-padding: 60px 0;
+    --container-pad: 0 20px;
+  }
+}
