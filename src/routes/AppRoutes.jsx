@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import PublicLayout from '../layouts/PublicLayout';
+import ClientPortalLayout from '../layouts/ClientPortalLayout';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 import Home from '../pages/public/Home';
@@ -19,6 +20,10 @@ import ForgotPassword from '../pages/auth/ForgotPassword';
 import ResetPassword from '../pages/auth/ResetPassword';
 
 import Dashboard from '../pages/client/Dashboard';
+import Profile from '../pages/client/Profile';
+import Appointments from '../pages/client/Appointments';
+import Notifications from '../pages/client/Notifications';
+import Documents from '../pages/client/Documents';
 
 export default function AppRoutes() {
   return (
@@ -45,7 +50,49 @@ export default function AppRoutes() {
           path="dashboard"
           element={
             <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
-              <Dashboard />
+              <ClientPortalLayout>
+                <Dashboard />
+              </ClientPortalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+              <ClientPortalLayout>
+                <Profile />
+              </ClientPortalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="appointments"
+          element={
+            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+              <ClientPortalLayout>
+                <Appointments />
+              </ClientPortalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+              <ClientPortalLayout>
+                <Notifications />
+              </ClientPortalLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="documents"
+          element={
+            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+              <ClientPortalLayout>
+                <Documents />
+              </ClientPortalLayout>
             </ProtectedRoute>
           }
         />

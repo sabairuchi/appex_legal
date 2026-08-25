@@ -36,6 +36,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    phone: {
+      type: String,
+      default: '',
+    },
+    bio: {
+      type: String,
+      default: '',
+    },
+    assignedLawyerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -101,6 +114,9 @@ class EmbeddedUserDoc {
     this.passwordHash = data.passwordHash;
     this.role = data.role || 'client';
     this.profileImage = data.profileImage || '';
+    this.phone = data.phone || '';
+    this.bio = data.bio || '';
+    this.assignedLawyerId = data.assignedLawyerId || null;
     this.isActive = data.isActive !== undefined ? data.isActive : true;
     this.resetPasswordToken = data.resetPasswordToken || undefined;
     this.resetPasswordExpires = data.resetPasswordExpires
@@ -133,6 +149,9 @@ class EmbeddedUserDoc {
       passwordHash: this.passwordHash,
       role: this.role,
       profileImage: this.profileImage,
+      phone: this.phone,
+      bio: this.bio,
+      assignedLawyerId: this.assignedLawyerId,
       isActive: this.isActive,
       resetPasswordToken: this.resetPasswordToken,
       resetPasswordExpires: formattedExpires,
@@ -226,5 +245,27 @@ export default class User {
     const doc = new EmbeddedUserDoc(data);
     await doc.save();
     return doc;
+  }
+
+  static async findByIdAndUpdate(id, updateData, options = {}) {
+    if (isMongooseConnected) {
+      return MongooseUser.findByIdAndUpdate(id, updateData, { new: true, runValidators: true, ...options }).select('-passwordHash');
+    }
+
+    const users = loadUsersFromFile();
+    const idx = users.findIndex((u) => u._id === id.toString());
+    if (idx === -1) return null;
+
+    // Apply allowed updates
+    const user = users[idx];
+    if (updateData.fullName !== undefined) user.fullName = updateData.fullName;
+    if (updateData.phone !== undefined) user.phone = updateData.phone;
+    if (updateData.bio !== undefined) user.bio = updateData.bio;
+    if (updateData.profileImage !== undefined) user.profileImage = updateData.profileImage;
+    user.updatedAt = new Date().toISOString();
+
+    users[idx] = user;
+    saveUsersToFile(users);
+    return new EmbeddedUserDoc(user);
   }
 }

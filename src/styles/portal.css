@@ -1,0 +1,261 @@
+/* Client Portal Specific Styles - Apex Legal */
+
+.portal-wrapper {
+  background-color: var(--gray-bg);
+  min-height: calc(100vh - 120px);
+  padding-bottom: 80px;
+}
+
+.portal-hero {
+  background-color: var(--navy-primary);
+  color: var(--white);
+  padding: 120px 0 35px;
+  border-bottom: 4px solid var(--gold-accent);
+}
+
+.portal-nav-bar {
+  background-color: var(--navy-secondary);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+  margin-bottom: 40px;
+  box-shadow: 0 4px 12px rgba(13, 27, 42, 0.15);
+}
+
+.portal-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.portal-nav-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.portal-nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+.portal-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  font-size: 15px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.portal-nav-item:hover {
+  color: var(--gold-accent);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.portal-nav-item.active {
+  color: var(--gold-accent);
+  font-weight: 600;
+  border-bottom-color: var(--gold-accent);
+  background-color: rgba(201, 168, 76, 0.08);
+}
+
+.portal-badge {
+  background-color: var(--gold-accent);
+  color: var(--navy-dark);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+  line-height: 1;
+}
+
+/* Card Styling */
+.portal-card {
+  background-color: var(--white);
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(13, 27, 42, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 3px solid var(--navy-primary);
+  padding: 28px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.portal-card.accent-gold {
+  border-top-color: var(--gold-accent);
+}
+
+.portal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-bg);
+}
+
+.portal-card-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--navy-primary);
+  margin: 0;
+}
+
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-pill.pending {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.status-pill.approved, .status-pill.confirmed {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.status-pill.rescheduled {
+  background-color: #E0E7FF;
+  color: #3730A3;
+}
+
+.status-pill.cancelled {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+.status-pill.completed, .status-pill.active {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+/* Polished Empty States */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  border: 1px dashed #CBD5E1;
+  border-radius: 6px;
+  background-color: #FAFAFB;
+}
+
+.empty-state-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+  color: var(--gold-accent);
+}
+
+.empty-state-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: var(--navy-primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.empty-state-desc {
+  font-size: 14px;
+  color: var(--gray-pillar);
+  max-width: 360px;
+  margin: 0 auto 16px;
+}
+
+/* Loading Skeletons */
+.skeleton {
+  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Tables */
+.portal-table-wrapper {
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #E2E8F0;
+}
+
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.portal-table th {
+  background-color: var(--navy-primary);
+  color: var(--white);
+  font-weight: 600;
+  padding: 14px 18px;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.portal-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #E2E8F0;
+  color: var(--navy-dark);
+}
+
+.portal-table tr:hover td {
+  background-color: #F8FAFC;
+}
+
+/* Modal / Dialog */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(13, 27, 42, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+}
+
+.modal-content {
+  background-color: var(--white);
+  border-radius: 8px;
+  max-width: 580px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  border-top: 4px solid var(--gold-accent);
+  padding: 30px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Responsive adjust */
+@media (max-width: 768px) {
+  .portal-hero {
+    padding: 100px 0 25px;
+  }
+  .portal-nav-item {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  .portal-card {
+    padding: 20px;
+  }
+}

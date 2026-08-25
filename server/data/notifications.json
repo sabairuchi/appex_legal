@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "2b511f18448c59eb964ff27e",
+    "client": "2e43a097e38d36af900bba6f",
+    "title": "Appointment Requested",
+    "message": "Your consultation request \"Initial Corporate Intake Consultation\" for 2026-09-15 at 10:00 AM has been submitted.",
+    "type": "appointment",
+    "isRead": true,
+    "createdAt": "2026-08-25T09:34:58.409Z",
+    "updatedAt": "2026-08-25T09:34:58.459Z"
+  }
+]

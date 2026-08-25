@@ -22,5 +22,33 @@
     "isActive": true,
     "createdAt": "2026-08-25T05:59:08.838Z",
     "updatedAt": "2026-08-25T05:59:08.839Z"
+  },
+  {
+    "_id": "2e43a097e38d36af900bba6f",
+    "fullName": "Updated M2 Client Name",
+    "email": "client_m2_1787650497332@apexlegal.com",
+    "passwordHash": "$2b$12$mhiwiI.fnBSQ.r3WxKDnFe06QZpkUBM8aOdRS8VhnlF7g/q9lgzpO",
+    "role": "client",
+    "profileImage": "",
+    "phone": "+1 (555) 987-6543",
+    "bio": "Client corporate litigation overview notes.",
+    "assignedLawyerId": null,
+    "isActive": true,
+    "createdAt": "2026-08-25T09:34:58.148Z",
+    "updatedAt": "2026-08-25T09:34:58.307Z"
+  },
+  {
+    "_id": "a81d2c200676b976814b9a71",
+    "fullName": "Client Two Authorization Test",
+    "email": "client2_m2_1787650498471@apexlegal.com",
+    "passwordHash": "$2b$12$lggMg3jYla7KNSuSLo04wuKZWWG0lXYna2BC1jj4QGYsELU/DXpve",
+    "role": "client",
+    "profileImage": "",
+    "phone": "",
+    "bio": "",
+    "assignedLawyerId": null,
+    "isActive": true,
+    "createdAt": "2026-08-25T09:34:59.165Z",
+    "updatedAt": "2026-08-25T09:34:59.165Z"
   }
 ]

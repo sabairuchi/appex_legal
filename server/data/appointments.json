@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "d4b7753554f7879f8f494bd9",
+    "client": "2e43a097e38d36af900bba6f",
+    "lawyer": null,
+    "title": "Initial Corporate Intake Consultation",
+    "appointmentType": "Corporate & M&A",
+    "appointmentDate": "2026-09-15",
+    "appointmentTime": "10:00 AM",
+    "status": "pending",
+    "notes": "Discussion regarding shareholder agreement review.",
+    "createdAt": "2026-08-25T09:34:58.396Z",
+    "updatedAt": "2026-08-25T09:34:58.397Z"
+  }
+]
