@@ -3,18 +3,30 @@ import mongoose from 'mongoose';
 export let isMongooseConnected = false;
 
 export const connectDB = async () => {
+  const isProduction = process.env.NODE_ENV === 'production';
   const connUri = process.env.MONGODB_URI;
+
+  if (isProduction && !connUri) {
+    throw new Error('Database configuration error: MONGODB_URI environment variable is required in production.');
+  }
 
   if (connUri) {
     try {
-      const conn = await mongoose.connect(connUri, { serverSelectionTimeoutMS: 3000 });
+      const conn = await mongoose.connect(connUri, { serverSelectionTimeoutMS: 5000 });
       isMongooseConnected = true;
       console.log(`[DB] Connected to MongoDB: ${conn.connection.host}`);
-      return;
+      return conn;
     } catch (err) {
-      console.warn(`[DB Warning] MongoDB URI connection failed (${err.message}). Using Embedded Persistence Engine.`);
+      if (isProduction) {
+        throw new Error(`Database connection failed in production: ${err.message}`);
+      }
+      console.warn(`[DB Warning] MongoDB URI connection failed (${err.message}). Using local development persistence engine.`);
     }
   }
 
-  console.log('[DB] Running with Embedded Apex Persistence Engine (server/data/users.json).');
+  if (isProduction) {
+    throw new Error('Database connection required in production environment.');
+  }
+
+  console.log('[DB] Running with local development persistence engine.');
 };

@@ -34,9 +34,12 @@ app.use(async (req, res, next) => {
           isActive: true,
         });
       }
-      dbConnected = true;
     } catch (err) {
+      if (process.env.NODE_ENV === 'production') {
+        return next(err);
+      }
       console.warn('[DB Init Warning]:', err.message);
+      dbConnected = true;
     }
   }
   next();

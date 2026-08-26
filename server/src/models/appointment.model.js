@@ -53,32 +53,15 @@ const appointmentSchema = new mongoose.Schema(
 
 const MongooseAppointment = mongoose.model('Appointment', appointmentSchema);
 
+import { safeLoadFromFile, safeSaveToFile } from '../utils/fileStore.js';
+
 // --- Embedded File-Backed Persistence Engine (Fallback) ---
-const DATA_DIR = path.resolve('data');
-const DATA_FILE = path.join(DATA_DIR, 'appointments.json');
-
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([]), 'utf8');
-  }
-};
-
 const loadAppointmentsFromFile = () => {
-  ensureDataFile();
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(raw || '[]');
-  } catch (err) {
-    return [];
-  }
+  return safeLoadFromFile('appointments.json', []);
 };
 
 const saveAppointmentsToFile = (appointments) => {
-  ensureDataFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(appointments, null, 2), 'utf8');
+  safeSaveToFile('appointments.json', appointments);
 };
 
 class EmbeddedAppointmentDoc {
@@ -158,15 +141,7 @@ export default class Appointment {
       }
 
       // Populate user details in embedded mode
-      let users = [];
-      const usersFile = path.join(DATA_DIR, 'users.json');
-      if (fs.existsSync(usersFile)) {
-        try {
-          users = JSON.parse(fs.readFileSync(usersFile, 'utf8') || '[]');
-        } catch (e) {
-          users = [];
-        }
-      }
+      const users = safeLoadFromFile('users.json', []);
 
       if (query.search) {
         const s = query.search.toLowerCase();
@@ -253,13 +228,7 @@ export default class Appointment {
       const found = appointments.find((a) => a._id === id.toString());
       if (!found) return null;
       const doc = new EmbeddedAppointmentDoc(found);
-      let users = [];
-      const usersFile = path.join(DATA_DIR, 'users.json');
-      if (fs.existsSync(usersFile)) {
-        try {
-          users = JSON.parse(fs.readFileSync(usersFile, 'utf8') || '[]');
-        } catch (e) {}
-      }
+      const users = safeLoadFromFile('users.json', []);
       if (doc.client) {
         const cUser = users.find((u) => u._id === doc.client.toString());
         if (cUser) {

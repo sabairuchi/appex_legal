@@ -4,8 +4,10 @@ import User from '../models/user.model.js';
 import { verifyCaptcha } from '../utils/verifyCaptcha.js';
 import { sendResetPasswordEmail } from '../services/email.service.js';
 
+import { getJwtSecret } from '../utils/getJwtSecret.js';
+
 const generateTokenAndSetCookie = (res, userId) => {
-  const secret = process.env.JWT_SECRET || 'apex_legal_fallback_dev_secret_2026';
+  const secret = getJwtSecret();
   const token = jwt.sign({ id: userId }, secret, {
     expiresIn: '30d',
   });

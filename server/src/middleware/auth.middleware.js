@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
+import { getJwtSecret } from '../utils/getJwtSecret.js';
 
 export const protect = async (req, res, next) => {
   let token;
@@ -16,7 +17,7 @@ export const protect = async (req, res, next) => {
   }
 
   try {
-    const secret = process.env.JWT_SECRET || 'apex_legal_fallback_dev_secret_2026';
+    const secret = getJwtSecret();
     const decoded = jwt.verify(token, secret);
 
     const user = await User.findById(decoded.id).select('-passwordHash');

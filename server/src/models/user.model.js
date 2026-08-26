@@ -91,32 +91,29 @@ userSchema.statics.hashPassword = async function (password) {
 
 const MongooseUser = mongoose.model('User', userSchema);
 
-// --- Embedded File-Backed Persistence Engine (Fallback) ---
-const DATA_DIR = path.resolve('data');
-const DATA_FILE = path.join(DATA_DIR, 'users.json');
+import { safeLoadFromFile, safeSaveToFile } from '../utils/fileStore.js';
 
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([]), 'utf8');
-  }
-};
+// --- Embedded File-Backed Persistence Engine (Fallback) ---
+const defaultUsers = [
+  {
+    _id: '0ef25c4331fdee17a12447de',
+    fullName: 'Apex Admin',
+    email: 'admin@apexlegal.com',
+    passwordHash: '$2b$12$T/LUlojwwZYsdaLbotDD7uFZaA2JSoDlfhIaY8t7XsJBuTs.zPn3u',
+    role: 'admin',
+    profileImage: '',
+    isActive: true,
+    createdAt: '2026-08-25T10:22:13.645Z',
+    updatedAt: '2026-08-25T10:22:13.645Z',
+  },
+];
 
 const loadUsersFromFile = () => {
-  ensureDataFile();
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(raw || '[]');
-  } catch (err) {
-    return [];
-  }
+  return safeLoadFromFile('users.json', defaultUsers);
 };
 
 const saveUsersToFile = (users) => {
-  ensureDataFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2), 'utf8');
+  safeSaveToFile('users.json', users);
 };
 
 class EmbeddedUserDoc {

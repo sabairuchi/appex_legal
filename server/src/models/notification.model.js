@@ -40,32 +40,15 @@ const notificationSchema = new mongoose.Schema(
 
 const MongooseNotification = mongoose.model('Notification', notificationSchema);
 
+import { safeLoadFromFile, safeSaveToFile } from '../utils/fileStore.js';
+
 // --- Embedded File-Backed Persistence Engine (Fallback) ---
-const DATA_DIR = path.resolve('data');
-const DATA_FILE = path.join(DATA_DIR, 'notifications.json');
-
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([]), 'utf8');
-  }
-};
-
 const loadNotificationsFromFile = () => {
-  ensureDataFile();
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(raw || '[]');
-  } catch (err) {
-    return [];
-  }
+  return safeLoadFromFile('notifications.json', []);
 };
 
 const saveNotificationsToFile = (notifications) => {
-  ensureDataFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(notifications, null, 2), 'utf8');
+  safeSaveToFile('notifications.json', notifications);
 };
 
 class EmbeddedNotificationDoc {

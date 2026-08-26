@@ -56,32 +56,15 @@ const documentSchema = new mongoose.Schema(
 
 const MongooseDocument = mongoose.model('Document', documentSchema);
 
+import { safeLoadFromFile, safeSaveToFile } from '../utils/fileStore.js';
+
 // --- Embedded File-Backed Persistence Engine (Fallback) ---
-const DATA_DIR = path.resolve('data');
-const DATA_FILE = path.join(DATA_DIR, 'documents.json');
-
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([]), 'utf8');
-  }
-};
-
 const loadDocumentsFromFile = () => {
-  ensureDataFile();
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(raw || '[]');
-  } catch (err) {
-    return [];
-  }
+  return safeLoadFromFile('documents.json', []);
 };
 
-const saveDocumentsToFile = (docs) => {
-  ensureDataFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(docs, null, 2), 'utf8');
+const saveDocumentsToFile = (documents) => {
+  safeSaveToFile('documents.json', documents);
 };
 
 class EmbeddedDocumentDoc {
