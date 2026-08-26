@@ -27,8 +27,13 @@ export default function Login() {
 
     try {
       setSubmitting(true);
-      await login({ email, password, captchaToken });
-      navigate(from, { replace: true });
+      const resData = await login({ email, password, captchaToken });
+      const role = resData?.user?.role;
+      const defaultPath = role === 'admin' ? '/admin' : '/dashboard';
+      const redirectPath = (location.state?.from?.pathname && location.state?.from?.pathname !== '/login')
+        ? location.state.from.pathname
+        : defaultPath;
+      navigate(redirectPath, { replace: true });
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

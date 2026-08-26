@@ -56,7 +56,7 @@ export default function AppRoutes() {
         <Route
           path="dashboard"
           element={
-            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+            <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
                 <Dashboard />
               </ClientPortalLayout>
@@ -66,7 +66,7 @@ export default function AppRoutes() {
         <Route
           path="profile"
           element={
-            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+            <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
                 <Profile />
               </ClientPortalLayout>
@@ -76,7 +76,7 @@ export default function AppRoutes() {
         <Route
           path="appointments"
           element={
-            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+            <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
                 <Appointments />
               </ClientPortalLayout>
@@ -86,7 +86,7 @@ export default function AppRoutes() {
         <Route
           path="notifications"
           element={
-            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+            <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
                 <Notifications />
               </ClientPortalLayout>
@@ -96,7 +96,7 @@ export default function AppRoutes() {
         <Route
           path="documents"
           element={
-            <ProtectedRoute allowedRoles={['client', 'lawyer', 'admin']}>
+            <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
                 <Documents />
               </ClientPortalLayout>

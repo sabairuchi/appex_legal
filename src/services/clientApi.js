@@ -1,4 +1,6 @@
-const API_BASE = '/api/client';
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/client`
+  : '/api/client';
 
 export const fetchDashboard = async () => {
   const res = await fetch(`${API_BASE}/dashboard`, {

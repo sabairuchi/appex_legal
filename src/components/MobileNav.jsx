@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function MobileNav({ isOpen, onClose }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLinkClick = () => {
     onClose();
@@ -51,9 +51,15 @@ export default function MobileNav({ isOpen, onClose }) {
           <Link to="/contact" className="nav-link" onClick={handleLinkClick}>Contact</Link>
         </li>
         {isAuthenticated ? (
-          <li>
-            <Link to="/dashboard" className="nav-link" onClick={handleLinkClick}>Client Portal</Link>
-          </li>
+          user?.role === 'admin' ? (
+            <li>
+              <Link to="/admin" className="nav-link" onClick={handleLinkClick} style={{ color: 'var(--gold-accent)' }}>Admin Console</Link>
+            </li>
+          ) : (
+            <li>
+              <Link to="/dashboard" className="nav-link" onClick={handleLinkClick}>Client Portal</Link>
+            </li>
+          )
         ) : (
           <li>
             <Link to="/login" className="nav-link" onClick={handleLinkClick}>Sign In</Link>

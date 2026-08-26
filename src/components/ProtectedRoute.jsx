@@ -37,7 +37,8 @@ export default function ProtectedRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
-    return <Navigate to="/" replace />;
+    const redirectTarget = user?.role === 'admin' ? '/admin' : '/dashboard';
+    return <Navigate to={redirectTarget} replace />;
   }
 
   return children;
