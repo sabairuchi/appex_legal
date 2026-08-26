@@ -63,7 +63,7 @@ export default function Register() {
         textAlign: 'center'
       }}>
         <div className="container reveal">
-          <h1>Client Registration</h1>
+          <h1>Create Your Account</h1>
           <p>Create your private account to manage legal consultations & documentation</p>
         </div>
       </section>
@@ -78,7 +78,7 @@ export default function Register() {
             borderTop: '4px solid var(--gold-accent)'
           }}>
             <h2 style={{ fontSize: '28px', color: 'var(--navy-primary)', marginBottom: '8px', textAlign: 'center' }}>
-              Create Your Client Account
+              Create Your Account
             </h2>
             <p style={{ fontSize: '14px', color: 'var(--gray-pillar)', marginBottom: '30px', textAlign: 'center' }}>
               Register below for secure access to our legal portal.

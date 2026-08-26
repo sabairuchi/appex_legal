@@ -45,7 +45,7 @@ export default function Login() {
         textAlign: 'center'
       }}>
         <div className="container reveal">
-          <h1>Client Portal Login</h1>
+          <h1>Sign In to Your Account</h1>
           <p>Access your confidential legal dashboard & case communications</p>
         </div>
       </section>
