@@ -6,9 +6,9 @@ import { sendResetPasswordEmail } from '../services/email.service.js';
 
 import { getJwtSecret } from '../utils/getJwtSecret.js';
 
-const generateTokenAndSetCookie = (res, userId) => {
+const generateTokenAndSetCookie = (res, userId, role) => {
   const secret = getJwtSecret();
-  const token = jwt.sign({ id: userId }, secret, {
+  const token = jwt.sign({ id: userId, role }, secret, {
     expiresIn: '30d',
   });
 
@@ -68,11 +68,12 @@ export const register = async (req, res, next) => {
     });
 
     // Generate Token and Cookie
-    generateTokenAndSetCookie(res, user._id);
+    const token = generateTokenAndSetCookie(res, user._id, user.role);
 
     return res.status(201).json({
       success: true,
       message: 'Registration successful',
+      token,
       user: {
         _id: user._id,
         fullName: user.fullName,
@@ -120,11 +121,12 @@ export const login = async (req, res, next) => {
     }
 
     // Generate Token and Cookie
-    generateTokenAndSetCookie(res, user._id);
+    const token = generateTokenAndSetCookie(res, user._id, user.role);
 
     return res.status(200).json({
       success: true,
       message: 'Login successful',
+      token,
       user: {
         _id: user._id,
         fullName: user.fullName,

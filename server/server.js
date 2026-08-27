@@ -9,8 +9,7 @@ import healthRoutes from './src/routes/health.routes.js';
 import authRoutes from './src/routes/auth.routes.js';
 import clientRoutes from './src/routes/client.routes.js';
 import adminRoutes from './src/routes/admin.routes.js';
-import User from './src/models/user.model.js';
-import { errorHandler } from './src/middleware/errorHandler.js';
+import { seedInitialAdmin } from './src/utils/seedAdmin.js';
 
 dotenv.config();
 
@@ -18,27 +17,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to Database
-connectDB().then(async () => {
-  // Seed initial Admin user safely if no admin user exists
-  try {
-    const adminCount = await User.countDocuments({ role: 'admin' });
-    if (adminCount === 0) {
-      const initialAdminEmail = process.env.ADMIN_INITIAL_EMAIL || 'admin@apexlegal.com';
-      const initialAdminPass = process.env.ADMIN_INITIAL_PASSWORD || 'ApexAdmin2026!';
-      const hash = await User.hashPassword(initialAdminPass);
-      await User.create({
-        fullName: 'Apex Admin',
-        email: initialAdminEmail.toLowerCase(),
-        passwordHash: hash,
-        role: 'admin',
-        isActive: true,
-      });
-      console.log(`[Admin Seed] Created initial system admin account (${initialAdminEmail}).`);
-    }
-  } catch (err) {
-    console.warn('[Admin Seed Warning]:', err.message);
-  }
-});
+connectDB()
+  .then(async () => {
+    await seedInitialAdmin();
+  })
+  .catch((err) => {
+    console.error('[DB Startup Error]:', err.message);
+  });
 
 // Security & Parsing Middleware
 app.use(helmet({

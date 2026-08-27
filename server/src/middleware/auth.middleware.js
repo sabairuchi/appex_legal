@@ -33,6 +33,9 @@ export const protect = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    if (error.message === 'JWT_SECRET environment variable is missing') {
+      return res.status(500).json({ success: false, message: 'Server configuration error' });
+    }
     console.error('[Auth Middleware Error]:', error.message);
     return res.status(401).json({ success: false, message: 'Not authorized, token invalid or expired' });
   }

@@ -1,26 +1,41 @@
 import mongoose from 'mongoose';
 
-export let isMongooseConnected = false;
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 export const connectDB = async () => {
   const connUri = process.env.MONGODB_URI;
 
-  if (connUri) {
-    try {
-      if (mongoose.connection.readyState === 1) {
-        isMongooseConnected = true;
-        return mongoose.connection;
-      }
-      const conn = await mongoose.connect(connUri, { serverSelectionTimeoutMS: 3000 });
-      isMongooseConnected = true;
-      console.log(`[DB] Connected to MongoDB: ${conn.connection.host}`);
-      return conn;
-    } catch (err) {
-      console.warn(`[DB Warning] MongoDB URI connection failed (${err.message}). Operating in DEMO MODE with file/memory storage.`);
-      isMongooseConnected = false;
-    }
-  } else {
-    console.log('[DB] MONGODB_URI not provided. Operating in DEMO MODE with persistent local file/memory storage.');
-    isMongooseConnected = false;
+  if (!connUri) {
+    throw new Error('MONGODB_URI environment variable is missing');
   }
+
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    };
+
+    cached.promise = mongoose.connect(connUri, opts).then((mongooseInstance) => {
+      console.log(`[DB] Connected to MongoDB: ${mongooseInstance.connection.host}`);
+      return mongooseInstance;
+    });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
 };
+

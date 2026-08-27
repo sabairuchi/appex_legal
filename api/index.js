@@ -8,8 +8,7 @@ import healthRoutes from '../server/src/routes/health.routes.js';
 import authRoutes from '../server/src/routes/auth.routes.js';
 import clientRoutes from '../server/src/routes/client.routes.js';
 import adminRoutes from '../server/src/routes/admin.routes.js';
-import User from '../server/src/models/user.model.js';
-import { errorHandler } from '../server/src/middleware/errorHandler.js';
+import { seedInitialAdmin } from '../server/src/utils/seedAdmin.js';
 
 dotenv.config();
 
@@ -29,26 +28,16 @@ app.use(async (req, res, next) => {
   try {
     await connectDB();
     if (!dbInitialized) {
-      const adminCount = await User.countDocuments({ role: 'admin' });
-      if (adminCount === 0) {
-        const initialAdminEmail = process.env.ADMIN_INITIAL_EMAIL || 'admin@apexlegal.com';
-        const initialAdminPass = process.env.ADMIN_INITIAL_PASSWORD || 'ApexAdmin2026!';
-        const hash = await User.hashPassword(initialAdminPass);
-        await User.create({
-          fullName: 'Apex Admin',
-          email: initialAdminEmail.toLowerCase(),
-          passwordHash: hash,
-          role: 'admin',
-          isActive: true,
-        });
-      }
+      await seedInitialAdmin();
       dbInitialized = true;
     }
     next();
   } catch (err) {
-    console.warn('[DB Init Warning]:', err.message);
-    dbInitialized = true;
-    next();
+    console.error('[DB Init Error]:', err.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Server configuration error',
+    });
   }
 });
 

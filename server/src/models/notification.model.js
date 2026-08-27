@@ -1,10 +1,5 @@
 import mongoose from 'mongoose';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
-import { isMongooseConnected } from '../config/db.js';
 
-// Mongoose Schema Definition
 const notificationSchema = new mongoose.Schema(
   {
     client: {
@@ -38,143 +33,18 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
-const MongooseNotification = mongoose.model('Notification', notificationSchema);
-
-import { safeLoadFromFile, safeSaveToFile } from '../utils/fileStore.js';
-
-// --- Embedded File-Backed Persistence Engine (Fallback) ---
-const loadNotificationsFromFile = () => {
-  return safeLoadFromFile('notifications.json', []);
+notificationSchema.statics.markAllAsRead = async function (clientId) {
+  return await this.updateMany({ client: clientId }, { isRead: true });
 };
 
-const saveNotificationsToFile = (notifications) => {
-  safeSaveToFile('notifications.json', notifications);
+notificationSchema.statics.markAsRead = async function (id, clientId) {
+  return await this.findOneAndUpdate(
+    { _id: id, client: clientId },
+    { isRead: true },
+    { new: true }
+  );
 };
 
-class EmbeddedNotificationDoc {
-  constructor(data) {
-    this._id = data._id || crypto.randomBytes(12).toString('hex');
-    this.client = data.client;
-    this.title = data.title;
-    this.message = data.message;
-    this.type = data.type || 'info';
-    this.isRead = data.isRead !== undefined ? data.isRead : false;
-    this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
-    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
-  }
+const Notification = mongoose.models.Notification || mongoose.model('Notification', notificationSchema);
 
-  async save() {
-    this.updatedAt = new Date();
-    const notifications = loadNotificationsFromFile();
-    const idx = notifications.findIndex((n) => n._id === this._id);
-
-    const plainDoc = {
-      _id: this._id,
-      client: this.client,
-      title: this.title,
-      message: this.message,
-      type: this.type,
-      isRead: this.isRead,
-      createdAt: this.createdAt instanceof Date ? this.createdAt.toISOString() : new Date(this.createdAt).toISOString(),
-      updatedAt: this.updatedAt.toISOString(),
-    };
-
-    if (idx >= 0) {
-      notifications[idx] = plainDoc;
-    } else {
-      notifications.push(plainDoc);
-    }
-    saveNotificationsToFile(notifications);
-    return this;
-  }
-}
-
-export default class Notification {
-  static find(query = {}) {
-    if (isMongooseConnected) {
-      return MongooseNotification.find(query).sort({ createdAt: -1 });
-    }
-
-    const p = (async () => {
-      const notifications = loadNotificationsFromFile();
-      let filtered = notifications;
-
-      if (query.client) {
-        filtered = filtered.filter((n) => n.client.toString() === query.client.toString());
-      }
-      if (query.isRead !== undefined) {
-        filtered = filtered.filter((n) => n.isRead === query.isRead);
-      }
-
-      // Sort descending by createdAt
-      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      return filtered.map((n) => new EmbeddedNotificationDoc(n));
-    })();
-
-    return p;
-  }
-
-  static findById(id) {
-    if (isMongooseConnected) {
-      return MongooseNotification.findById(id);
-    }
-
-    const p = (async () => {
-      const notifications = loadNotificationsFromFile();
-      const found = notifications.find((n) => n._id === id);
-      if (!found) return null;
-      return new EmbeddedNotificationDoc(found);
-    })();
-
-    return p;
-  }
-
-  static async create(data) {
-    if (isMongooseConnected) {
-      return MongooseNotification.create(data);
-    }
-
-    const doc = new EmbeddedNotificationDoc(data);
-    await doc.save();
-    return doc;
-  }
-
-  static async markAllAsRead(clientId) {
-    if (isMongooseConnected) {
-      return MongooseNotification.updateMany({ client: clientId }, { isRead: true });
-    }
-
-    const notifications = loadNotificationsFromFile();
-    let updatedCount = 0;
-    notifications.forEach((n) => {
-      if (n.client.toString() === clientId.toString() && !n.isRead) {
-        n.isRead = true;
-        n.updatedAt = new Date().toISOString();
-        updatedCount++;
-      }
-    });
-    saveNotificationsToFile(notifications);
-    return { modifiedCount: updatedCount };
-  }
-
-  static async markAsRead(id, clientId) {
-    if (isMongooseConnected) {
-      return MongooseNotification.findOneAndUpdate(
-        { _id: id, client: clientId },
-        { isRead: true },
-        { new: true }
-      );
-    }
-
-    const notifications = loadNotificationsFromFile();
-    const idx = notifications.findIndex(
-      (n) => n._id === id && n.client.toString() === clientId.toString()
-    );
-    if (idx === -1) return null;
-
-    notifications[idx].isRead = true;
-    notifications[idx].updatedAt = new Date().toISOString();
-    saveNotificationsToFile(notifications);
-    return new EmbeddedNotificationDoc(notifications[idx]);
-  }
-}
+export default Notification;
