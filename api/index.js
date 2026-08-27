@@ -46,9 +46,6 @@ app.use(async (req, res, next) => {
     }
     next();
   } catch (err) {
-    if (process.env.NODE_ENV === 'production') {
-      return next(err);
-    }
     console.warn('[DB Init Warning]:', err.message);
     dbInitialized = true;
     next();

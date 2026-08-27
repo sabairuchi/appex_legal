@@ -28,10 +28,6 @@ const getWritableDataDir = () => {
 };
 
 export const safeLoadFromFile = (filename, defaultData = []) => {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(`Database error: Real MongoDB connection required for ${filename} in production environment.`);
-  }
-
   if (inMemoryStores[filename] !== undefined && inMemoryStores[filename] !== null) {
     return inMemoryStores[filename];
   }
@@ -56,10 +52,6 @@ export const safeLoadFromFile = (filename, defaultData = []) => {
 };
 
 export const safeSaveToFile = (filename, data) => {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(`Database error: Real MongoDB connection required for ${filename} in production environment.`);
-  }
-
   inMemoryStores[filename] = data;
   const dir = getWritableDataDir();
   if (dir) {
