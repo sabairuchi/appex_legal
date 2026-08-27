@@ -118,5 +118,22 @@
     "isActive": true,
     "createdAt": "2026-08-25T10:23:47.588Z",
     "updatedAt": "2026-08-25T10:23:47.588Z"
+  },
+  {
+    "_id": "b0361bb5f5e6279460a23a9c",
+    "fullName": "Demo Client",
+    "email": "democlient_2026@apexlegal.com",
+    "passwordHash": "$2b$12$WxXpESls8UnhvrezK6Mx8eQmV0g1M50qURP81fY5Gj8Sl4ph5X7NG",
+    "role": "client",
+    "profileImage": "",
+    "phone": "",
+    "bio": "",
+    "assignedLawyerId": null,
+    "specialization": "",
+    "experienceYears": 0,
+    "availabilityStatus": "available",
+    "isActive": true,
+    "createdAt": "2026-08-27T06:30:08.261Z",
+    "updatedAt": "2026-08-27T06:30:08.262Z"
   }
 ]
