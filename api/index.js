@@ -17,6 +17,14 @@ const app = express();
 
 let dbInitialized = false;
 
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
+app.use(express.json());
+app.use(cookieParser());
+
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -47,14 +55,6 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({
-  origin: true,
-  credentials: true,
-}));
-app.use(express.json());
-app.use(cookieParser());
-
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/client', clientRoutes);
@@ -62,4 +62,4 @@ app.use('/api/admin', adminRoutes);
 
 app.use(errorHandler);
 
-export default app;
+export default (req, res) => app(req, res);
