@@ -99,12 +99,23 @@ const defaultUsers = [
     _id: '0ef25c4331fdee17a12447de',
     fullName: 'Apex Admin',
     email: 'admin@apexlegal.com',
-    passwordHash: '$2b$12$T/LUlojwwZYsdaLbotDD7uFZaA2JSoDlfhIaY8t7XsJBuTs.zPn3u',
+    passwordHash: '$2b$10$PgIi5JjDDQoMHZoJlFhLVeLScoOgadhjSaZWQp1bmDwCngt8DHfJW',
     role: 'admin',
     profileImage: '',
     isActive: true,
     createdAt: '2026-08-25T10:22:13.645Z',
     updatedAt: '2026-08-25T10:22:13.645Z',
+  },
+  {
+    _id: '98d017bac3bcec8cf8e3bf8b',
+    fullName: 'John',
+    email: 'john@example.com',
+    passwordHash: '$2b$10$2s2eMtYBfTTpTHYfGZWtsOOGteOnFbP6AmwBQ9V/v2MMibrBsIfIK',
+    role: 'client',
+    profileImage: '',
+    isActive: true,
+    createdAt: '2026-08-25T05:59:08.838Z',
+    updatedAt: '2026-08-25T05:59:08.839Z',
   },
 ];
 
@@ -274,7 +285,7 @@ export default class User {
       let found = null;
 
       if (query.email) {
-        found = users.find((u) => u.email === query.email.toLowerCase());
+        found = users.find((u) => u.email && u.email.toLowerCase() === query.email.toLowerCase());
       } else if (query.resetPasswordToken) {
         found = users.find((u) => {
           if (u.resetPasswordToken !== query.resetPasswordToken) return false;
