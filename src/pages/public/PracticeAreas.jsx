@@ -16,7 +16,7 @@ export default function PracticeAreas() {
       <section id="corporate" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" alt="Corporate Law" loading="lazy" />
+            <img src="/assets/images/corporate-law.jpg" alt="Corporate Law" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
@@ -43,7 +43,7 @@ export default function PracticeAreas() {
       <section id="litigation" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop" alt="Litigation" loading="lazy" />
+            <img src="/assets/images/litigation.jpg" alt="Litigation" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
@@ -70,7 +70,7 @@ export default function PracticeAreas() {
       <section id="real-estate" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop" alt="Real Estate" loading="lazy" />
+            <img src="/assets/images/real-estate.jpg" alt="Real Estate" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
@@ -97,7 +97,7 @@ export default function PracticeAreas() {
       <section id="family" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop" alt="Family Law" loading="lazy" />
+            <img src="/assets/images/family-law.jpg" alt="Family Law" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
@@ -124,7 +124,7 @@ export default function PracticeAreas() {
       <section id="criminal" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop" alt="Criminal Defense" loading="lazy" />
+            <img src="/assets/images/criminal-defense.jpg" alt="Criminal Defense" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
@@ -151,7 +151,7 @@ export default function PracticeAreas() {
       <section id="estate" className="practice-detail-section">
         <div className="container practice-detail-container reveal">
           <div className="practice-image">
-            <img src="https://images.unsplash.com/photo-1450133064473-71024230f91b?q=80&w=800&auto=format&fit=crop" alt="Estate Planning" loading="lazy" />
+            <img src="/assets/images/estate-planning.jpg" alt="Estate Planning" loading="lazy" />
           </div>
           <div className="practice-content">
             <div className="practice-header">
