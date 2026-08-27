@@ -15,12 +15,12 @@ dotenv.config();
 
 const app = express();
 
-let dbConnected = false;
+let dbInitialized = false;
 
 app.use(async (req, res, next) => {
-  if (!dbConnected) {
-    try {
-      await connectDB();
+  try {
+    await connectDB();
+    if (!dbInitialized) {
       const adminCount = await User.countDocuments({ role: 'admin' });
       if (adminCount === 0) {
         const initialAdminEmail = process.env.ADMIN_INITIAL_EMAIL || 'admin@apexlegal.com';
@@ -34,15 +34,17 @@ app.use(async (req, res, next) => {
           isActive: true,
         });
       }
-    } catch (err) {
-      if (process.env.NODE_ENV === 'production') {
-        return next(err);
-      }
-      console.warn('[DB Init Warning]:', err.message);
-      dbConnected = true;
+      dbInitialized = true;
     }
+    next();
+  } catch (err) {
+    if (process.env.NODE_ENV === 'production') {
+      return next(err);
+    }
+    console.warn('[DB Init Warning]:', err.message);
+    dbInitialized = true;
+    next();
   }
-  next();
 });
 
 app.use(helmet({ contentSecurityPolicy: false }));
