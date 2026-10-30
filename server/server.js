@@ -10,6 +10,7 @@ import authRoutes from './src/routes/auth.routes.js';
 import clientRoutes from './src/routes/client.routes.js';
 import adminRoutes from './src/routes/admin.routes.js';
 import { seedInitialAdmin } from './src/utils/seedAdmin.js';
+import { errorHandler } from './src/middleware/errorHandler.js';
 
 dotenv.config();
 

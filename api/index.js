@@ -9,6 +9,7 @@ import authRoutes from '../server/src/routes/auth.routes.js';
 import clientRoutes from '../server/src/routes/client.routes.js';
 import adminRoutes from '../server/src/routes/admin.routes.js';
 import { seedInitialAdmin } from '../server/src/utils/seedAdmin.js';
+import { errorHandler } from '../server/src/middleware/errorHandler.js';
 
 dotenv.config();
 

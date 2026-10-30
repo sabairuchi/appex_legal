@@ -16,7 +16,23 @@ export const seedInitialAdmin = async () => {
       });
       console.log(`[Admin Seed] Created initial system admin account (${initialAdminEmail}).`);
     }
+
+    const demoClient = await User.findOne({ email: 'john@example.com' });
+    if (!demoClient) {
+      const initialClientEmail = process.env.CLIENT_INITIAL_EMAIL || 'john@example.com';
+      const initialClientPass = process.env.CLIENT_INITIAL_PASSWORD || 'ClientPass2026!';
+      const hash = await User.hashPassword(initialClientPass);
+      await User.create({
+        fullName: 'John',
+        email: initialClientEmail.toLowerCase().trim(),
+        passwordHash: hash,
+        role: 'client',
+        isActive: true,
+      });
+      console.log(`[Client Seed] Created initial demo client account (${initialClientEmail}).`);
+    }
   } catch (err) {
-    console.warn('[Admin Seed Warning]:', err.message);
+    console.warn('[Seed Warning]:', err.message);
   }
 };
+
