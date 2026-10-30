@@ -1,8 +1,8 @@
 import express from 'express';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+
 import { connectDB } from '../server/src/config/db.js';
 import healthRoutes from '../server/src/routes/health.routes.js';
 import authRoutes from '../server/src/routes/auth.routes.js';
@@ -15,38 +15,52 @@ dotenv.config();
 
 const app = express();
 
-let dbInitialized = false;
+let dbInitialized;
 
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(cors({
-  origin: true,
-  credentials: true,
+const ensureDatabase = async () => {
+  if (!dbInitialized) {
+    dbInitialized = connectDB()
+      .then(() => seedInitialAdmin())
+      .catch((err) => {
+        dbInitialized = null;
+        throw err;
+      });
+  }
+
+  return dbInitialized;
+};
+
+// Security Middleware
+app.use(helmet({
+  contentSecurityPolicy: false,
 }));
+
+// Parsing Middleware
 app.use(express.json());
 app.use(cookieParser());
 
+// Database Initialization
 app.use(async (req, res, next) => {
   try {
-    await connectDB();
-    if (!dbInitialized) {
-      await seedInitialAdmin();
-      dbInitialized = true;
-    }
+    await ensureDatabase();
     next();
   } catch (err) {
     console.error('[DB Init Error]:', err.message);
-    return res.status(500).json({
+
+    res.status(500).json({
       success: false,
       message: 'Server configuration error',
     });
   }
 });
 
+// API Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/client', clientRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Error Handler
 app.use(errorHandler);
 
-export default (req, res) => app(req, res);
+export default app;

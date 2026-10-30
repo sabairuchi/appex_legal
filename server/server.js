@@ -1,3 +1,4 @@
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -15,32 +16,53 @@ import { errorHandler } from './src/middleware/errorHandler.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Connect to Database
-connectDB()
-  .then(async () => {
-    await seedInitialAdmin();
-  })
-  .catch((err) => {
-    console.error('[DB Startup Error]:', err.message);
-  });
+// Database connection and initial admin seeding
+let dbReady;
 
-// Security & Parsing Middleware
+const ensureDatabase = async () => {
+  if (!dbReady) {
+    dbReady = connectDB()
+      .then(() => seedInitialAdmin())
+      .catch((err) => {
+        dbReady = null;
+        throw err;
+      });
+  }
+
+  return dbReady;
+};
+
+// Security Middleware
 app.use(helmet({
-  contentSecurityPolicy: false, // Allows Unsplash images & inline SVGs during development
+  contentSecurityPolicy: false,
 }));
+
+// CORS Configuration
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true,
 }));
+
+// Parsing Middleware
 app.use(express.json());
 app.use(cookieParser());
+
+// Database initialization before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await ensureDatabase();
+    next();
+  } catch (err) {
+    console.error('[DB Startup Error]:', err.message);
+    next(err);
+  }
+});
 
 // Static Serving for Uploads Directory
 app.use('/uploads', express.static(path.resolve('uploads')));
 
-// Routes
+// API Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/client', clientRoutes);
@@ -49,7 +71,10 @@ app.use('/api/admin', adminRoutes);
 // Error Handler Middleware
 app.use(errorHandler);
 
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`[Server] Apex Legal API Server running on port ${PORT}`);
 });
 
+export default app;
