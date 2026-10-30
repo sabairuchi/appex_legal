@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
-let cached = global.mongoose;
+const cached = globalThis.mongoose || {
+  conn: null,
+  promise: null,
+};
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+globalThis.mongoose = cached;
 
 export const connectDB = async () => {
   const connUri = process.env.MONGODB_URI;
@@ -20,22 +21,24 @@ export const connectDB = async () => {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
     };
 
-    cached.promise = mongoose.connect(connUri, opts).then((mongooseInstance) => {
-      console.log(`[DB] Connected to MongoDB: ${mongooseInstance.connection.host}`);
-      return mongooseInstance;
-    });
+    cached.promise = mongoose.connect(connUri, opts)
+      .then((mongooseInstance) => {
+        console.log(
+          `[DB] Connected to MongoDB: ${mongooseInstance.connection.host}`
+        );
+        return mongooseInstance;
+      })
+      .catch((error) => {
+        cached.promise = null;
+        cached.conn = null;
+        throw error;
+      });
   }
 
-  try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
-  }
+  cached.conn = await cached.promise;
 
   return cached.conn;
 };
-
