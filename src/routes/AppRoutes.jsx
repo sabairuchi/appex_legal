@@ -8,7 +8,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import Home from '../pages/public/Home';
 import About from '../pages/public/About';
 import Attorneys from '../pages/public/Attorneys';
-import PracticeAreas from '';
+import PracticeAreas from '../pages/public/PracticeAreas';
 import Contact from '../pages/public/Contact';
 import PrivacyPolicy from '../pages/public/PrivacyPolicy';
 import TermsOfService from '../pages/public/TermsOfService';
