@@ -64,6 +64,24 @@ app.use(async (req, res, next) => {
 // Static Serving for Uploads
 app.use('/uploads', express.static(path.resolve('uploads')));
 
+// Controlled runtime error testing
+if (process.env.RUNTIME_ERROR_TEST === 'true') {
+  app.get('/api/runtime-test/:code', (req, res, next) => {
+    const code = Number(req.params.code);
+
+    if (![500, 502, 503].includes(code)) {
+      return res.status(400).json({
+        message: 'Unsupported test status'
+      });
+    }
+
+    const error = new Error('Controlled runtime failure');
+    error.statusCode = code;
+
+    next(error);
+  });
+}
+
 // API Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
