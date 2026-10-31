@@ -15,12 +15,13 @@
       "framework": "express"
     }
   },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": {
-        "service": "frontend"
-      }
+ "rewrites": [
+  {
+    "source": "/(.*)",
+    "destination": {
+      "service": "backend"
     }
-  ]
+  }
+]
 }
+
