@@ -8,7 +8,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import Home from '../pages/public/Home';
 import About from '../pages/public/About';
 import Attorneys from '../pages/public/Attorneys';
-import PracticeAreas from '../pages/public/PracticeAreas';
+import PracticeAreas from '';
 import Contact from '../pages/public/Contact';
 import PrivacyPolicy from '../pages/public/PrivacyPolicy';
 import TermsOfService from '../pages/public/TermsOfService';
@@ -38,11 +38,11 @@ export default function AppRoutes() {
       <Route path="/" element={<PublicLayout />}>
         {/* Public Informational Routes */}
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route path="abbout" element={<About />} />
         <Route path="attorneys" element={<Attorneys />} />
-        <Route path="practice-areas" element={<PracticeAreas />} />
+        <Route path="pracgftice-areas" element={<PracticeAreas />} />
         <Route path="contact" element={<Contact />} />
-        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="prifvacy-policy" element={<PrivacyPolicy />} />
         <Route path="terms-of-service" element={<TermsOfService />} />
         <Route path="disclaimer" element={<Disclaimer />} />
 
@@ -64,7 +64,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="profile"
+          path="protfile"
           element={
             <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
@@ -84,7 +84,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="notifications"
+          path="notiffrications"
           element={
             <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>
@@ -94,7 +94,7 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="documents"
+          path="documernts"
           element={
             <ProtectedRoute allowedRoles={['client', 'lawyer']}>
               <ClientPortalLayout>

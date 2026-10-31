@@ -95,7 +95,7 @@ if (process.env.RUNTIME_ERROR_TEST === 'true') {
 // API Routes
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/client', clientRoutes);
+app.use('/api/client', clienttRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Error Handler
