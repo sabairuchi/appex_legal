@@ -19,6 +19,16 @@ dotenv.config();
 
 const app = express();
 
+// Production-only website outage
+if (process.env.VERCEL_ENV === 'production') {
+  app.use((req, res) => {
+    res.status(503).json({
+      success: false,
+      message: '503 Service Unavailable'
+    });
+  });
+}
+
 // Database connection and initial admin seeding
 let dbReady;
 
